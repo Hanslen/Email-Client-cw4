@@ -25,8 +25,10 @@ public class CommandChangeFolder extends AbstractCommand {
 	@Override
 	public String undo() {
 		// TODO Auto-generated method stub
-		if(model.changeActiveFolder(model.getpreviouschangefolder())){
-			return "Success: tried to change active folder to "+model.getpreviouschangefolder();
+		if(model.changeActiveFolder(model.getpreviouschangefolder().get(model.getpreviouschangefolder().size()-1))){
+			String name = model.getpreviouschangefolder().get(model.getpreviouschangefolder().size()-1);
+			model.getpreviouschangefolder().remove(model.getpreviouschangefolder().size()-1);
+			return "Success: tried to change active folder to "+name;
 		}
 		return "Error: tried to undo failed";
 	}

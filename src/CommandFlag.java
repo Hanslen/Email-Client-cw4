@@ -50,7 +50,7 @@ public class CommandFlag extends AbstractCommand{
 			flag = "blue";
 			successMessage = "Success: flagged " + messageId + " as "+flag;
 		} else if(flags[1].equalsIgnoreCase("noflag")){
-			flag = "blue";
+			flag = "noflag";
 			successMessage = "Success: flagged " + messageId + " as "+flag;
 		} else {
 			return false;
@@ -62,8 +62,10 @@ public class CommandFlag extends AbstractCommand{
 	@Override
 	public String undo() {
 		// TODO Auto-generated method stub
-		if(model.flagMsg(messageId, model.getPreviousFlag())){
-			return "Success: tried to flag "+messageId +" as "+model.getPreviousFlag();
+		if(model.flagMsg(messageId, model.getPreviousFlag().get(model.getPreviousFlag().size()-1))){
+			String name = model.getPreviousFlag().get(model.getPreviousFlag().size()-1);
+			model.getPreviousFlag().remove(model.getPreviousFlag().size()-1);
+			return "Success: tried to flag "+messageId +" as "+name;
 		}
 		return "Error: tried to undo failed";
 	}

@@ -51,7 +51,7 @@ public class CommandMark extends AbstractCommand {
 		// TODO Auto-generated method stub
 		boolean isRead;
 		String isReadS;
-		if(model.getPreviousIsRead() == false){
+		if(model.getPreviousIsRead().get(model.getPreviousIsRead().size()-1) == false){
 			isRead = true;
 			isReadS = "read";
 		}
@@ -60,6 +60,7 @@ public class CommandMark extends AbstractCommand {
 			isReadS = "unread";
 		}
 		if(model.mark(messageId, isRead)){
+			model.getPreviousIsRead().remove(model.getPreviousIsRead().size()-1);
 			return "Success: tried to mark "+messageId +" as "+isReadS;
 		}
 		return "Error: tried to mark failed";

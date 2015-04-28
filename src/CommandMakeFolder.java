@@ -26,8 +26,10 @@ public class CommandMakeFolder extends AbstractCommand {
 	@Override
 	public String undo() {
 		// TODO Auto-generated method stub
-		if(model.deleteFolder(model.getpreviouscreatefolder())){
-			return "Success: tried to undo the command create folder "+model.getpreviouscreatefolder();
+		if(model.deleteFolder(model.getpreviouscreatefolder().get(model.getpreviouscreatefolder().size()-1))){
+			String name = model.getpreviouscreatefolder().get(model.getpreviouscreatefolder().size()-1);
+			model.getpreviouscreatefolder().remove(model.getpreviouscreatefolder().size()-1);
+			return "Success: tried to undo the command create folder "+name;
 		}
 		return "Error: tried to undo failed";
 	}

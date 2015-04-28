@@ -46,6 +46,11 @@ public class CommandFactory {
 			throws BadCommandException {
 		String[] commandInput = command.split(" ");
 		commandInput[0] = model.getAlias().get(commandInput[0]);
+		if(commandInput.length == 0){
+			return new CommandBad(model, commandInput).setMessage("Error: Not a valid command: "
+					+ command);
+		}
+		commandInput[0] = model.getAlias().get(commandInput[0]);
 		if(commandInput[0] == null){
 			return new CommandBad(model, commandInput).setMessage("Error: Not a valid command: "
 					+ command);

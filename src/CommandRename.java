@@ -15,6 +15,9 @@ public class CommandRename extends AbstractCommand {
 			model.setPreviousRename(oldName, newName);
 			return "Success: renamed " + oldName + " to " + newName;
 		} else {
+			if(oldName.equals("red")||oldName.equals("green")||oldName.equals("blue")){
+				return "Cannot rename smart folder";
+			}
 			return "Error: " + oldName + " does not exist or " + newName
 					+ " already exists.";
 		}
@@ -28,8 +31,11 @@ public class CommandRename extends AbstractCommand {
 	@Override
 	public String undo() {
 		// TODO Auto-generated method stub
-		if(model.renameFolder(model.getPreviousRename()[1],model.getPreviousRename()[0])){
-			return "Success: tried to rename "+model.getPreviousRename()[1] +" to "+model.getPreviousRename()[0];
+		if(model.renameFolder(model.getPreviousRename().get(model.getPreviousRename().size()-1)[1],model.getPreviousRename().get(model.getPreviousRename().size()-1)[0])){
+			String name1 = model.getPreviousRename().get(model.getPreviousRename().size()-1)[1];
+			String name0 = model.getPreviousRename().get(model.getPreviousRename().size()-1)[0];
+			model.getPreviousRename().remove(model.getPreviousRename().size()-1);
+			return "Success: tried to rename "+name1 +" to "+name0;
 		}
 		return "Error: tried to undo failed";
 	}

@@ -42,10 +42,12 @@ public class CommandMoveMessage extends AbstractCommand {
 	public String undo() {
 		// TODO Auto-generated method stub
 		String temple = model.getActiveFolderName();
-		model.changeActiveFolder(model.getpreviousmovemsgfolder()[1]);
-		if(model.move(messageId, model.getpreviousmovemsgfolder()[0])){
+		model.changeActiveFolder(model.getpreviousmovemsgfolder().get(model.getpreviousmovemsgfolder().size()-1)[1]);
+		if(model.move(messageId, model.getpreviousmovemsgfolder().get(model.getpreviousmovemsgfolder().size()-1)[0])){
 			model.changeActiveFolder(temple);
-			return "Success: tried to move message "+messageId +" back to "+model.getpreviousmovemsgfolder()[0];
+			String name = model.getpreviousmovemsgfolder().get(model.getpreviousmovemsgfolder().size()-1)[0];
+			model.getpreviousmovemsgfolder().remove(model.getpreviousmovemsgfolder().size()-1);
+			return "Success: tried to move message "+messageId +" back to "+name;
 		}
 		return "Error: tried to undo move failed";
 	}

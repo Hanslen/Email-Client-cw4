@@ -129,24 +129,24 @@ public interface InterfaceClientModel {
 	HashMap<String, String> getAlias();
 	
 	void setPreviousFlag(String flag);
-	String getPreviousFlag();
+	ArrayList<String> getPreviousFlag();
 	
 	void setPeviousIsRead(boolean IsRead);
-	boolean getPreviousIsRead();
+	ArrayList<Boolean> getPreviousIsRead();
 	
 	void setPreviousRename(String previousRename1, String previousRename2);
-	String[] getPreviousRename();
+	ArrayList<String[]> getPreviousRename();
 	
 	void setPreviouschangefolder(String previouschangefolder);
-	String getpreviouschangefolder();
+	ArrayList<String> getpreviouschangefolder();
 	
 	void setPreviouscreatefolder(String previouscreatefolder);
-	String getpreviouscreatefolder();
+	ArrayList<String> getpreviouscreatefolder();
 	
 	boolean deleteFolder(String deletefoldername);
 	
 	void setpreviousmovemsgfolder(String previousmovemsgfolder1, String previousmovemsgfolder2);
-	String[] getpreviousmovemsgfolder();
+	ArrayList<String[]> getpreviousmovemsgfolder();
 	
 	void setpreviousalias(String previousalias);
 	String getpreviousalias();

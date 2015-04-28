@@ -12,7 +12,6 @@ public class Controller {
 	ArrayList<String> stackCommand = new ArrayList<String>();
 	ArrayList<String> undoCommand = new ArrayList<String>();
 	int nowCommand = 0;
-	int undotimes = 1;
 	int nowredocomamnd = 0;
 	int redotimes = 1;
 	
@@ -33,41 +32,47 @@ public class Controller {
 		//AbstractCommand command;
 		int undo = 0;
 		int redo = 0;
-
+		String[] commandInput = theInput.split(" ");
+		if(commandInput.length != 0){
+			if(commandInput[0] != null){
+				commandInput[0] = model.getAlias().get(commandInput[0]);
+			}
+		}
+		if(commandInput[0] == null){
+			commandInput[0] = "error";
+		}
 		try {
-			if(theInput.length() == 4){
-				if(theInput.substring(0, 4).equals("undo")){
-					nowCommand = stackCommand.size();
-					if(nowCommand != 0){
-						response = commandFactory.buildCommand(stackCommand.get(nowCommand-undotimes)).undo();
-						undoCommand.add(stackCommand.get(nowCommand-undotimes));
-						if(response.substring(0, 5).equals("Error")){
-							undotimes++;
-						}
-					}
-					else{
-						response = "Error: No command to undo";
-					}
-					undo = 1;
+			if(commandInput[0].equals("undo")){
+				nowCommand = stackCommand.size();
+				if(nowCommand != 0 &&(nowCommand-1) >-1){
+					response = commandFactory.buildCommand(stackCommand.get(nowCommand-1)).undo();
+					undoCommand.add(stackCommand.get(nowCommand-1));
+					stackCommand.remove(stackCommand.size()-1);
 				}
-				else if(theInput.substring(0, 4).equals("redo")){
-					nowredocomamnd = undoCommand.size();
-					if(nowredocomamnd != 0){
-						response = commandFactory.buildCommand(undoCommand.get(nowredocomamnd-redotimes)).execute();
-						redotimes++;
-					}
-					else{
-						response = "Error: No command to redo";
-					}
-					redo = 1;
+				else{
+					response = "Error: No command to undo";
 				}
+				undo = 1;
+			}
+			else if(commandInput[0].equals("redo")){
+				nowredocomamnd = undoCommand.size();
+				if(nowredocomamnd != 0 &&(nowredocomamnd-redotimes) >-1){
+					response = commandFactory.buildCommand(undoCommand.get(nowredocomamnd-redotimes)).execute();
+					stackCommand.remove(undoCommand.get(nowredocomamnd-redotimes));
+					redotimes++;
+				}
+				else{
+					response = "Error: No command to redo";
+				}
+				redo = 1;
 			}
 			if(undo == 0 && redo == 0){
 				response = commandFactory.buildCommand(theInput).execute();
-				undotimes = 1;
+				undoCommand = new ArrayList<String>();
+				redotimes = 1;
 			}
 			
-			if(!response.substring(0, 5).equals("Error")){
+			if(!response.substring(0, 5).equals("Error") && undo== 0&&redo== 0){
 				stackCommand.add(theInput);
 			}
 			undo = 0;

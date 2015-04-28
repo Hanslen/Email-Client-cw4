@@ -22,14 +22,14 @@ public class ClientModel implements InterfaceClientModel {
 	InterfaceConnector connector;
 	HashMap<String, InterfaceFolder> folders = new HashMap<String, InterfaceFolder>();
 	ArrayList<Integer> knownMessageIds;
-	String previousFlag = "noflag";
-	boolean previousIsRead = false;
-	String[] previousrename = new String[2];
-	String previouschangefolder;
-	String previouscreatefolder;
-	String[] previousmovemsgfolder = new String[2];
+	ArrayList<String> previousFlag = new ArrayList<String>();
+	ArrayList<Boolean> previousIsRead = new ArrayList<Boolean>();
+	ArrayList<String[]> previousrename = new ArrayList<String[]>();
+	ArrayList<String> previouschangefolder = new ArrayList<String>();
+	ArrayList<String> previouscreatefolder;
 	String previousalias;
 	int crcounter = 0;
+	ArrayList<String[]> previousmovemsgfoldera= new ArrayList<String[]>();
 	
 	HashMap<String, String> alias = new HashMap<String, String>();
 	String activeFolderName;
@@ -44,6 +44,7 @@ public class ClientModel implements InterfaceClientModel {
 		folders.put(blueFolder, new Folder());
 		activeFolderName = "inbox";
 		knownMessageIds = new ArrayList<Integer>();
+		previouscreatefolder = new ArrayList<String>();
 		alias.put("cf", "cf");
 		alias.put("listfolders", "listfolders");
 		alias.put("list", "list");
@@ -61,6 +62,8 @@ public class ClientModel implements InterfaceClientModel {
 		alias.put("flag", "flag");
 		alias.put("alias", "alias");
 		alias.put("cr", "cr");
+		alias.put("undo", "undo");
+		alias.put("redo", "redo");
 	}
 
 	@Override
@@ -116,7 +119,7 @@ public class ClientModel implements InterfaceClientModel {
 	public boolean renameFolder(String oldName, String newName) {
 		if(oldName.equals(inboxFolder) || oldName.equals(sentFolder)){
 			return false;
-		} else if (folders.containsKey(oldName) && !folders.containsKey(newName)) {
+		} else if (folders.containsKey(oldName) && !folders.containsKey(newName)&&!oldName.equals("red")&&!oldName.equals("blue")&&!oldName.equals("green")) {
 			folders.put(newName, folders.remove(oldName));
 			activeFolderName = newName;
 			return true;
@@ -215,6 +218,7 @@ public class ClientModel implements InterfaceClientModel {
 		String successResponse = connector.sendMessage(msg.toString());
 		int providedId = Integer.parseInt(successResponse.split(" ")[1]);
 		msg.setId(providedId);
+		msg.markRead(true);
 		msg.setFlag("noflag");
 		return true;
 	}
@@ -268,7 +272,7 @@ public class ClientModel implements InterfaceClientModel {
 		// TODO Auto-generated method stub
 		if(alias.containsKey(origin)){			
 			if(!alias.containsKey(newAlias)){
-				alias.put(newAlias, origin);
+				alias.put(newAlias, alias.get(origin));
 				return true;
 			}
 		}
@@ -284,11 +288,11 @@ public class ClientModel implements InterfaceClientModel {
 	@Override
 	public void setPreviousFlag(String flag) {
 		// TODO Auto-generated method stub
-		this.previousFlag = flag;
+		this.previousFlag.add(flag);
 	}
 
 	@Override
-	public String getPreviousFlag() {
+	public ArrayList<String> getPreviousFlag() {
 		// TODO Auto-generated method stub
 		return this.previousFlag;
 	}
@@ -296,11 +300,11 @@ public class ClientModel implements InterfaceClientModel {
 	@Override
 	public void setPeviousIsRead(boolean IsRead) {
 		// TODO Auto-generated method stub
-		previousIsRead = IsRead;
+		previousIsRead.add(IsRead);
 	}
 
 	@Override
-	public boolean getPreviousIsRead() {
+	public ArrayList<Boolean> getPreviousIsRead() {
 		// TODO Auto-generated method stub
 		return previousIsRead;
 	}
@@ -308,12 +312,15 @@ public class ClientModel implements InterfaceClientModel {
 	@Override
 	public void setPreviousRename(String previousRename1, String previousRename2) {
 		// TODO Auto-generated method stub
-		this.previousrename[0] = previousRename1;
-		this.previousrename[1] = previousRename2;
+		String[] previousnamea = new String[2];
+		previousnamea[0] = previousRename1;
+		previousnamea[1] = previousRename2;
+		previousrename.add(previousnamea);
+		
 	}
 
 	@Override
-	public String[] getPreviousRename() {
+	public ArrayList<String[]> getPreviousRename() {
 		// TODO Auto-generated method stub
 		return this.previousrename;
 	}
@@ -321,11 +328,11 @@ public class ClientModel implements InterfaceClientModel {
 	@Override
 	public void setPreviouschangefolder(String previouschangefolder) {
 		// TODO Auto-generated method stub
-		this.previouschangefolder = previouschangefolder;
+		this.previouschangefolder.add(previouschangefolder);
 	}
 
 	@Override
-	public String getpreviouschangefolder() {
+	public ArrayList<String> getpreviouschangefolder() {
 		// TODO Auto-generated method stub
 		return this.previouschangefolder;
 	}
@@ -333,11 +340,11 @@ public class ClientModel implements InterfaceClientModel {
 	@Override
 	public void setPreviouscreatefolder(String previouscreatefolder) {
 		// TODO Auto-generated method stub
-		this.previouscreatefolder = previouscreatefolder;
+		this.previouscreatefolder.add(previouscreatefolder);
 	}
 
 	@Override
-	public String getpreviouscreatefolder() {
+	public ArrayList<String> getpreviouscreatefolder() {
 		// TODO Auto-generated method stub
 		return this.previouscreatefolder;
 	}
@@ -352,14 +359,16 @@ public class ClientModel implements InterfaceClientModel {
 	@Override
 	public void setpreviousmovemsgfolder(String previousmovemsgfolder1, String previousmovemsgfolder2) {
 		// TODO Auto-generated method stub
-		this.previousmovemsgfolder[0] = previousmovemsgfolder1;
-		this.previousmovemsgfolder[1] = previousmovemsgfolder2;
+		String[] previousmovemsgfolder = new String[2];
+		previousmovemsgfolder[0] = previousmovemsgfolder1;
+		previousmovemsgfolder[1] = previousmovemsgfolder2;
+		previousmovemsgfoldera.add(previousmovemsgfolder);
 	}
 
 	@Override
-	public String[] getpreviousmovemsgfolder() {
+	public ArrayList<String[]> getpreviousmovemsgfolder() {
 		// TODO Auto-generated method stub
-		return this.previousmovemsgfolder;
+		return this.previousmovemsgfoldera;
 	}
 
 	@Override

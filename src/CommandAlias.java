@@ -22,7 +22,7 @@ public class CommandAlias extends AbstractCommand{
 			return "Added alias "+newCom+" to "+origin;
 		}
 		
-		return "Error: does not have"+origin+" or command"+newCom+"has already existed.";
+		return "Error: does not have "+origin+" or command "+newCom+" has already existed.";
 		
 	}
 
